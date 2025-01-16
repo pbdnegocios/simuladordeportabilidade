@@ -1,0 +1,43 @@
+<label for="taxaAtual">Taxa de Juros Atual (% ao ano):</label>
+        <input type="number" id="taxaAtual" placeholder="Ex: 12" required>
+
+        <label for="taxaNova">Nova Taxa de Juros (% ao ano):</label>
+        <input type="number" id="taxaNova" placeholder="Ex: 8" required>
+
+        <label for="prazo">Prazo Restante (meses):</label>
+        <input type="number" id="prazo" placeholder="Ex: 48" required>
+
+        <button type="button" onclick="calcularEconomia()">Calcular Economia</button>
+    </form>
+
+    <div id="resultado" class="result" style="display: none;"></div>
+</div>
+
+<script>
+    function calcularEconomia() {
+        const saldoDevedor = parseFloat(document.getElementById('saldoDevedor').value);
+        const taxaAtual = parseFloat(document.getElementById('taxaAtual').value) / 100 / 12;
+        const taxaNova = parseFloat(document.getElementById('taxaNova').value) / 100 / 12;
+        const prazo = parseInt(document.getElementById('prazo').value);
+
+        // Cálculo da parcela atual
+        const parcelaAtual = saldoDevedor * taxaAtual / (1 - Math.pow(1 + taxaAtual, -prazo));
+        
+        // Cálculo da parcela com a nova taxa
+        const parcelaNova = saldoDevedor * taxaNova / (1 - Math.pow(1 + taxaNova, -prazo));
+
+        // Economia total
+        const economiaMensal = parcelaAtual - parcelaNova;
+        const economiaTotal = economiaMensal * prazo;
+
+        // Exibição do resultado
+        const resultadoDiv = document.getElementById('resultado');
+        resultadoDiv.style.display = 'block';
+        resultadoDiv.innerHTML = `
+            <p>Parcela Atual: <strong>R$ ${parcelaAtual.toFixed(2)}</strong></p>
+            <p>Nova Parcela: <strong>R$ ${parcelaNova.toFixed(2)}</strong></p>
+            <p>Economia Mensal: <strong>R$ ${economiaMensal.toFixed(2)}</strong></p>
+            <p>Economia Total em ${prazo} meses: <strong>R$ ${economiaTotal.toFixed(2)}</strong></p>
+        `;
+    }
+</script>
